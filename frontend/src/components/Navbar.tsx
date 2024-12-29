@@ -16,6 +16,7 @@ import {User} from "@/service/schema/user";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Button} from "@/components/ui/button";
 import {getCurrentUser} from "@/service/auth";
+import {SidebarTrigger} from "@/components/ui/sidebar";
 
 export function Navbar() {
   const [user, setUser] = React.useState<User | null>(null);
@@ -30,6 +31,7 @@ export function Navbar() {
     <div className="w-full h-fit p-2 shadow-md flex flex-row justify-between items-center">
       <NavigationMenu>
         <NavigationMenuList className="flex items-center space-x-4">
+          <SidebarTrigger/>
           <NavigationMenuItem>
             <Link href="/" legacyBehavior passHref>
               <NavigationMenuLink

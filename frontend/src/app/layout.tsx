@@ -5,10 +5,8 @@ import AuthProvider from "@/provider/AuthProvider";
 import React from "react";
 import {Navbar} from "@/components/Navbar";
 import {Footer} from "@/components/Footer";
-import {Sidebar} from "@/components/Sidebar";
-import {isTokenValid, loadToken} from "@/lib/utils";
-import {getCurrentUser} from "@/service/auth";
-import {User} from "@/service/schema/user";
+import {AppSidebar} from "@/components/AppSidebar";
+import {SidebarProvider} from "@/components/ui/sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,23 +29,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <html lang="en">
+    <body
+      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+    >
     <AuthProvider>
-      <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-      <div className="flex flex-col min-h-screen">
-        <Navbar/>
-        <div className="flex flex-1">
-          <Sidebar/>
-          <main className="flex-1 p-4">
-            {children}
-          </main>
+      <SidebarProvider defaultOpen={false}>
+        <AppSidebar/>
+        <div className="size-full min-h-screen flex flex-col">
+          <Navbar/>
+          <div className="flex flex-1">
+            <main className="flex-1 p-4 ">
+              {children}
+            </main>
+          </div>
+          <Footer/>
         </div>
-        <Footer/>
-      </div>
-      </body>
-      </html>
+      </SidebarProvider>
     </AuthProvider>
+    </body>
+    </html>
   );
 }
