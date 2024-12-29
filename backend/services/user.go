@@ -34,11 +34,11 @@ func GetUserByUsername(username string) (*models.User, error) {
 	return &user, nil
 }
 
-func CreateUser(user *models.User) error {
+func CreateUser(user *models.User) (*models.User, error) {
 	if err := database.DB.Create(user).Error; err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return user, nil
 }
 
 func UpdateUser(id uint, user *models.User) (*models.User, error) {
@@ -98,7 +98,7 @@ func CreateSuperUser() {
 		DepartmentID: department.ID,
 	}
 
-	err = CreateUser(superUser)
+	_, err = CreateUser(superUser)
 	if err != nil {
 		log.Fatal("Failed to create super user:", err)
 	}

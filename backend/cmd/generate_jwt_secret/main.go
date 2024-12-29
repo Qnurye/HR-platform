@@ -1,4 +1,4 @@
-package main
+package generate_jwt_secret
 
 import (
 	"crypto/rand"
