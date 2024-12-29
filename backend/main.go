@@ -9,6 +9,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 //	@title	Employee Management System API
@@ -35,7 +38,15 @@ func main() {
 	database.ConnectDB()
 	services.CreateSuperUser()
 
-	r := routes.SetupRouter([]byte(config.AppConfig.Server.JWTSecret))
+	r := gin.Default()
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders: []string{"Origin", "Content-Type", "Authorization"},
+	}))
+
+	routes.SetupRouter([]byte(config.AppConfig.Server.JWTSecret))
 
 	port := config.AppConfig.Server.Port
 	err := r.Run(fmt.Sprintf(":%d", port))
