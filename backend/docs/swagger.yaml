@@ -1,0 +1,928 @@
+basePath: /
+definitions:
+  handlers.ErrorResponse:
+    properties:
+      msg:
+        type: string
+    type: object
+  handlers.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  handlers.LoginResponse:
+    properties:
+      expires_at:
+        type: string
+      token:
+        type: string
+    type: object
+  handlers.LogoutResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Approval:
+    properties:
+      approval_date:
+        type: string
+      approval_type:
+        $ref: '#/definitions/models.ApprovalType'
+      approver:
+        $ref: '#/definitions/models.User'
+      approver_id:
+        type: integer
+      comments:
+        type: string
+      created_at:
+        description: 创建时间
+        type: string
+      employee:
+        $ref: '#/definitions/models.User'
+      employee_id:
+        type: integer
+      id:
+        type: integer
+      request_date:
+        type: string
+      status:
+        $ref: '#/definitions/models.Status'
+      updated_at:
+        description: 更新时间
+        type: string
+    type: object
+  models.ApprovalType:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - General
+    - Leave
+    - Reimbursement
+  models.Department:
+    properties:
+      created_at:
+        description: 创建时间
+        type: string
+      function_code:
+        description: 部门职能编号
+        type: string
+      id:
+        description: 部门ID
+        type: integer
+      name:
+        description: 部门名称
+        type: string
+      parent_department_id:
+        description: 上级部门ID
+        type: integer
+      parentDepartment:
+        $ref: '#/definitions/models.Department'
+      updated_at:
+        description: 更新时间
+        type: string
+    type: object
+  models.EducationLevel:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    type: integer
+    x-enum-varnames:
+    - Doctor
+    - Master
+    - Bachelor
+    - Associate
+    - JuniorCollege
+    - HighSchool
+    - MiddleSchool
+    - PrimarySchool
+    - None
+  models.Ethnicity:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
+    - 17
+    - 18
+    - 19
+    - 20
+    - 21
+    - 22
+    - 23
+    - 24
+    - 25
+    - 26
+    - 27
+    - 28
+    - 29
+    - 30
+    - 31
+    - 32
+    - 33
+    - 34
+    - 35
+    - 36
+    - 37
+    - 38
+    - 39
+    - 40
+    - 41
+    - 42
+    - 43
+    - 44
+    - 45
+    - 46
+    - 47
+    - 48
+    - 49
+    - 50
+    - 51
+    - 52
+    - 53
+    - 54
+    type: integer
+    x-enum-varnames:
+    - Achang
+    - Bai
+    - Bonan
+    - Blang
+    - Bouyei
+    - Korean
+    - Daur
+    - Dai
+    - Deang
+    - Dongxiang
+    - Dong
+    - Drung
+    - Ewenki
+    - Evenk
+    - Gaoshan
+    - Gelao
+    - Hani
+    - Kazak
+    - Han
+    - Hezhe
+    - Hui
+    - Jino
+    - Jing
+    - Jingpo
+    - Kirgiz
+    - Lahu
+    - Li
+    - Lisu
+    - Lhoba
+    - Manchu
+    - Maonan
+    - Menba
+    - Mongol
+    - Miao
+    - Mulam
+    - Naxi
+    - Nu
+    - Pumi
+    - Qiang
+    - Sala
+    - She
+    - Shui
+    - Tajik
+    - Tatar
+    - Tujia
+    - Tu
+    - Wa
+    - Uyghur
+    - Uzbek
+    - Xibe
+    - Yao
+    - Yi
+    - Yugur
+    - Tibetan
+    - Zhuang
+  models.Gender:
+    enum:
+    - -1
+    - 0
+    - 1
+    type: integer
+    x-enum-varnames:
+    - Male
+    - NonBi
+    - Female
+  models.PoliticalStatus:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - PartyMember
+    - YouthLeagueMember
+    - Mass
+    - Other
+  models.Position:
+    enum:
+    - 0
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - Staff
+    - Manager
+    - Executive
+  models.Status:
+    enum:
+    - 0
+    - 1
+    type: integer
+    x-enum-varnames:
+    - Active
+    - Inactive
+  models.Title:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    - 9
+    - 10
+    - 11
+    - 12
+    - 13
+    - 14
+    - 15
+    - 16
+    - 17
+    - 18
+    - 19
+    - 20
+    - 21
+    - 22
+    - 23
+    - 24
+    - 25
+    - 26
+    - 27
+    - 28
+    - 29
+    - 30
+    - 31
+    - 32
+    - 33
+    - 34
+    - 35
+    - 36
+    - 37
+    - 38
+    - 39
+    - 40
+    - 41
+    - 42
+    - 43
+    - 44
+    - 45
+    - 46
+    - 47
+    type: integer
+    x-enum-varnames:
+    - CEO
+    - CFO
+    - COO
+    - CTO
+    - CMO
+    - CIO
+    - CHRO
+    - CSO
+    - CPO
+    - VP
+    - GeneralManager
+    - Director
+    - TeamLeader
+    - Supervisor
+    - Consultant
+    - Analyst
+    - Engineer
+    - Developer
+    - Designer
+    - Architect
+    - Accountant
+    - Auditor
+    - Lawyer
+    - Paralegal
+    - Recruiter
+    - Trainer
+    - Assistant
+    - Secretary
+    - Intern
+    - SalesRepresentative
+    - MarketingSpecialist
+    - CustomerServiceRepresentative
+    - BusinessDevelopmentManager
+    - ProjectManager
+    - ProductManager
+    - OperationsManager
+    - HRSpecialist
+    - FinanceManager
+    - ITSpecialist
+    - DataScientist
+    - Researcher
+    - ContentCreator
+    - Copywriter
+    - Editor
+    - PRSpecialist
+    - LogisticsCoordinator
+    - QualityAssuranceSpecialist
+    - SecuritySpecialist
+  models.User:
+    properties:
+      archive_location:
+        description: 档案存放地
+        type: string
+      birthday:
+        description: 生日
+        type: string
+      created_at:
+        description: 创建时间
+        type: string
+      department:
+        $ref: '#/definitions/models.Department'
+      department_id:
+        description: 部门 ID
+        type: integer
+      education_level:
+        allOf:
+        - $ref: '#/definitions/models.EducationLevel'
+        description: 学历
+      ethnicity:
+        allOf:
+        - $ref: '#/definitions/models.Ethnicity'
+        description: 民族
+      gender:
+        allOf:
+        - $ref: '#/definitions/models.Gender'
+        description: 性别
+      hire_date:
+        description: 入职日期
+        type: string
+      id:
+        description: 员工 ID
+        type: integer
+      id_number:
+        description: 身份证号
+        type: string
+      marital_status:
+        description: 婚姻状况
+        type: boolean
+      name:
+        description: 姓名
+        type: string
+      password:
+        description: 密码哈希值
+        type: string
+      phone_number:
+        description: 电话号码
+        type: string
+      photo:
+        description: 照片
+        items:
+          type: integer
+        type: array
+      place_of_origin:
+        description: 籍贯
+        type: integer
+      political_status:
+        allOf:
+        - $ref: '#/definitions/models.PoliticalStatus'
+        description: 政治面貌
+      position:
+        allOf:
+        - $ref: '#/definitions/models.Position'
+        description: 职位
+      residence_location:
+        description: 户口所在地
+        type: string
+      status:
+        allOf:
+        - $ref: '#/definitions/models.Status'
+        description: 状态
+      supervisor:
+        $ref: '#/definitions/models.User'
+      supervisor_id:
+        description: 主管 ID
+        type: integer
+      title:
+        allOf:
+        - $ref: '#/definitions/models.Title'
+        description: 职务
+      updated_at:
+        description: 更新时间
+        type: string
+      user_type:
+        allOf:
+        - $ref: '#/definitions/models.UserType'
+        description: 用户类型
+      username:
+        description: 用户名
+        type: string
+      work_id_number:
+        description: 工作证号
+        type: string
+    type: object
+  models.UserType:
+    enum:
+    - 1
+    - 2
+    type: integer
+    x-enum-varnames:
+    - Admin
+    - NormalUser
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server for an employee management system.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Employee Management System API
+  version: "1.0"
+paths:
+  /approvals:
+    get:
+      description: Get all approvals
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Approval'
+            type: array
+      security:
+      - Bearer: []
+      summary: Get all approvals
+      tags:
+      - approvals
+    post:
+      consumes:
+      - application/json
+      description: Create a new approval with the input payload
+      parameters:
+      - description: Approval Data
+        in: body
+        name: approval
+        required: true
+        schema:
+          $ref: '#/definitions/models.Approval'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Approval'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Create a new approval
+      tags:
+      - approvals
+  /approvals/{id}:
+    delete:
+      description: Delete an approval by ID
+      parameters:
+      - description: Approval ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Delete an approval by ID
+      tags:
+      - approvals
+    get:
+      description: Get details of an approval by ID
+      parameters:
+      - description: Approval ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Approval'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get an approval by ID
+      tags:
+      - approvals
+    put:
+      consumes:
+      - application/json
+      description: Update details of an approval by ID
+      parameters:
+      - description: Approval ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Approval Data
+        in: body
+        name: approval
+        required: true
+        schema:
+          $ref: '#/definitions/models.Approval'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Approval'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Update an approval by ID
+      tags:
+      - approvals
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate user and return JWT token
+      parameters:
+      - description: Login Credentials
+        in: body
+        name: credential
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.LoginResponse'
+      summary: User login
+      tags:
+      - auth
+  /auth/logout:
+    post:
+      description: Logout current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.LogoutResponse'
+      security:
+      - Bearer: []
+      summary: User logout
+      tags:
+      - auth
+  /auth/me:
+    get:
+      description: Get details of currently logged-in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get current user
+      tags:
+      - auth
+  /departments:
+    get:
+      description: Get all departments
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Department'
+            type: array
+      security:
+      - Bearer: []
+      summary: Get all departments
+      tags:
+      - departments
+    post:
+      consumes:
+      - application/json
+      description: Create a new department with the input payload
+      parameters:
+      - description: Department Data
+        in: body
+        name: department
+        required: true
+        schema:
+          $ref: '#/definitions/models.Department'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Department'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Create a new department
+      tags:
+      - departments
+  /departments/{id}:
+    delete:
+      description: Delete a department by ID
+      parameters:
+      - description: Department ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Delete a department by ID
+      tags:
+      - departments
+    get:
+      description: Get details of a department by ID
+      parameters:
+      - description: Department ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Department'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get a department by ID
+      tags:
+      - departments
+    put:
+      consumes:
+      - application/json
+      description: Update details of a department by ID
+      parameters:
+      - description: Department ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Department Data
+        in: body
+        name: department
+        required: true
+        schema:
+          $ref: '#/definitions/models.Department'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Department'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Update a department by ID
+      tags:
+      - departments
+  /users:
+    get:
+      description: Get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+      security:
+      - Bearer: []
+      summary: Get all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the input payload
+      parameters:
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Create a new user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      description: Delete a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Delete a user by ID
+      tags:
+      - users
+    get:
+      description: Get details of a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get a user by ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update details of a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: User Data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Update a user by ID
+      tags:
+      - users
+securityDefinitions:
+  Bearer:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
