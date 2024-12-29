@@ -9,7 +9,7 @@
 
 ```shell
 cd backend
-go run ./cmd/generate_jwt_secret.go
+go run ./cmd/generate_jwt_secret/main.go
 go build employee-management-system
 go run employee-management-system
 ```

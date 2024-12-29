@@ -4,8 +4,6 @@ import (
 	"employee-management-system/database"
 	"employee-management-system/models"
 	"errors"
-	"log"
-
 	"gorm.io/gorm"
 )
 
@@ -92,7 +90,6 @@ func GetOrCreateSuperUserDepartment() (*models.Department, error) {
 		ParentDepartmentID: nil,
 	}
 
-	log.Println("Creating default super user department")
 	newDepartment, err := CreateDepartment(&department)
 	if err != nil {
 		return nil, err
