@@ -218,7 +218,7 @@ export interface User {
 
 export const UserTypeMap = {
   [UserType.Admin]: "管理员",
-  [UserType.NormalUser]: "普通用户"
+  [UserType.NormalUser]: "职员"
 };
 
 export const GenderMap = {
@@ -395,7 +395,7 @@ export const TitleMap = {
     [Title.SecuritySpecialist]: "安全专家"
 };
 
-export const StatusMap = {
+export const UserStatusMap = {
   [Status.Active]: "在职",
   [Status.Inactive]: "离职"
 };

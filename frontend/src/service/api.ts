@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = loadToken();
-    if (isTokenValid(token)) config.headers.Authorization = `Bearer ${token}`;
+    if (isTokenValid(token)) config.headers.Authorization = `${token}`;
     return config;
   },
   (error) => {
@@ -32,6 +32,15 @@ axiosInstance.interceptors.response.use(
 export const post = async <T>(url: string, data: never): Promise<T> => {
   try {
     const response = await axiosInstance.post(url, data);
+    return response.data as T;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+
+export const get = async <T>(url: string, data: never): Promise<T> => {
+  try {
+    const response = await axiosInstance.get(url, data);
     return response.data as T;
   } catch (error) {
     return Promise.reject(error);

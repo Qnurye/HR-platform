@@ -13,7 +13,9 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({children}) => {
   useEffect(() => {
     if (isTokenValid(loadToken())) {
       setIsAuthenticated(true);
-      currentPath.includes("signin") && router.push("/");
+      if (currentPath.includes("signin")) {
+        router.push("/");
+      }
     } else {
       setIsAuthenticated(false);
       !currentPath.includes("signin") && router.push("/signin");
