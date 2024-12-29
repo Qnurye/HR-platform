@@ -1,0 +1,13 @@
+[Server]
+  secret = ""
+  Port = 8080
+[Database]
+  Host = "localhost"
+  Port = 5432
+  User = "root"
+  Password = "password"
+  DBName = "database"
+  SSLMode = "disable"
+[SuperUser]
+  Username = "admin"
+  Password = "admin123"
