@@ -3,7 +3,6 @@ package handlers
 import (
 	"employee-management-system/config"
 	"employee-management-system/services"
-	"log"
 	"net/http"
 	"time"
 
@@ -60,8 +59,6 @@ func Login(c *gin.Context) {
 
 	user, err := services.AuthenticateUser(credentials.Username, credentials.Password)
 	if err != nil {
-		log.Println(credentials)
-		log.Println(err)
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid username or password"})
 		return
 	}
@@ -107,6 +104,10 @@ type ErrorResponse struct {
 // @Router /auth/me [get]
 func GetCurrentUser(c *gin.Context) {
 	tokenStr := c.GetHeader("Authorization")
+	if tokenStr == "" {
+		c.JSON(http.StatusUnauthorized, ErrorResponse{Message: "No token provided"})
+		return
+	}
 	claims := &Claims{}
 
 	token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {

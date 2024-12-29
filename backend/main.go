@@ -3,7 +3,7 @@ package main
 import (
 	"employee-management-system/config"
 	"employee-management-system/database"
-	_ "employee-management-system/docs" // This is required for go-swagger to find your docs
+	_ "employee-management-system/docs"
 	"employee-management-system/routes"
 	"employee-management-system/services"
 	"fmt"
@@ -39,6 +39,7 @@ func main() {
 	services.CreateSuperUser()
 
 	r := gin.Default()
+	gin.SetMode(gin.DebugMode)
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins: []string{"*"},
@@ -46,14 +47,14 @@ func main() {
 		AllowHeaders: []string{"Origin", "Content-Type", "Authorization"},
 	}))
 
-	routes.SetupRouter([]byte(config.AppConfig.Server.JWTSecret))
+	r = routes.SetupRouter(r, []byte(config.AppConfig.Server.JWTSecret))
 
 	port := config.AppConfig.Server.Port
-	err := r.Run(fmt.Sprintf(":%d", port))
-	if err != nil {
+
+	if err := r.Run(fmt.Sprintf(":%d", port)); err != nil {
 		log.Fatal("Failed to start!")
-		return
+	} else {
+		log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))
 	}
 
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), r))
 }

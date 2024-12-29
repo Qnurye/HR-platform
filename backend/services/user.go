@@ -79,7 +79,6 @@ func CreateSuperUser() {
 		return
 	}
 
-	log.Println("Creating default super user")
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(config.AppConfig.SuperUser.Password), bcrypt.DefaultCost)
 	if err != nil {
 		log.Fatal("Failed to hash password:", err)
