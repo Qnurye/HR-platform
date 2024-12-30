@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"employee-management-system/database"
 	"employee-management-system/models"
 	"employee-management-system/services"
 	"net/http"
@@ -13,15 +14,38 @@ import (
 // @Summary Get all users
 // @Description Get all users
 // @Tags users
+// @Param department_id query int false "Department ID"
 // @Produce json
 // @Security Bearer
 // @Success 200 {array} models.User
 // @Router /users [get]
 func GetUsers(c *gin.Context) {
+	departmentIDParam := c.Query("department_id")
+	if departmentIDParam != "" {
+		departmentID, err := strconv.Atoi(departmentIDParam)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, ErrorResponse{Message: "Invalid department ID"})
+			return
+		}
+		users, err := services.GetUsersByDepartmentID(uint(departmentID))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, ErrorResponse{Message: "Failed to fetch users"})
+			return
+		}
+		c.JSON(http.StatusOK, users)
+		return
+	}
 	users, err := services.GetUsers()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, ErrorResponse{Message: "Failed to fetch users"})
 		return
+	}
+
+	for i := range users {
+		if err := database.DB.Preload("Supervisor").Preload("Department").Find(&users[i]).Error; err != nil {
+			c.JSON(http.StatusInternalServerError, ErrorResponse{Message: "Failed to fetch related data"})
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, users)
@@ -77,6 +101,44 @@ func GetUser(c *gin.Context) {
 		return
 	}
 
+	if err := database.DB.Preload("Supervisor").Preload("Department").Find(&user).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Message: "Failed to fetch related data"})
+		return
+	}
+
+	requestingUser, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, ErrorResponse{Message: "Unauthorized"})
+		return
+	}
+
+	if requestingUser.(*models.User).ID != user.ID && !(requestingUser.(*models.User).UserType == models.Admin) {
+		user.IDNumber = "***"
+		user.PhoneNumber = "***"
+		user.ArchiveLocation = "***"
+		user.ResidenceLocation = "***"
+	}
+
+	c.JSON(http.StatusOK, user)
+}
+
+// GetUserByWorkID godoc
+// @Summary Get user by work ID
+// @Description Get a user by their work ID number
+// @Tags users
+// @Produce json
+// @Security Bearer
+// @Param workId path string true "Work ID Number"
+// @Success 200 {object} models.User
+// @Failure 404 {object} ErrorResponse
+// @Router /users/work-id/{workId} [get]
+func GetUserByWorkID(c *gin.Context) {
+	workID := c.Param("workId")
+	user, err := services.GetUserByWorkIDNumber(workID)
+	if err != nil {
+		c.JSON(http.StatusNotFound, ErrorResponse{Message: "User not found"})
+		return
+	}
 	c.JSON(http.StatusOK, user)
 }
 

@@ -5,6 +5,7 @@ import (
 	"employee-management-system/database"
 	"employee-management-system/models"
 	"employee-management-system/services"
+	"golang.org/x/crypto/bcrypt"
 	"time"
 )
 
@@ -120,9 +121,11 @@ func main() {
 		ParentDepartment: Sales,
 	})
 
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte("password"), bcrypt.DefaultCost)
+
 	var Zhangsan, _ = services.CreateUser(&models.User{
 		Username:          "zhangsan",
-		Password:          "",
+		Password:          string(hashedPassword),
 		UserType:          models.Admin,
 		Name:              "张三",
 		Gender:            models.Female,
@@ -174,7 +177,7 @@ func main() {
 
 	var Wangwu, _ = services.CreateUser(&models.User{
 		Username:          "wangwu",
-		Password:          "",
+		Password:          string(hashedPassword),
 		UserType:          models.NormalUser,
 		Name:              "王五",
 		Gender:            models.Male,
@@ -200,7 +203,7 @@ func main() {
 
 	var Zhaoliu, _ = services.CreateUser(&models.User{
 		Username:          "zhaoliu",
-		Password:          "",
+		Password:          string(hashedPassword),
 		UserType:          models.NormalUser,
 		Name:              "赵六",
 		Gender:            models.Male,

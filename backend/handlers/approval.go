@@ -139,3 +139,49 @@ func DeleteApproval(c *gin.Context) {
 
 	c.Status(http.StatusNoContent)
 }
+
+// GetMyApprovals godoc
+// @Summary Get approvals assigned to the current user
+// @Description Get approvals assigned to the current user
+// @Tags approvals
+// @Produce json
+// @Security Bearer
+// @Success 200 {array} models.Approval
+// @Router /approvals/my [get]
+func GetMyApprovals(c *gin.Context) {
+	requestingUser, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Message: "Failed to fetch user"})
+		return
+	}
+	user, ok := requestingUser.(*models.User)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Message: "Failed to fetch user"})
+		return
+	}
+	approvals, err := services.GetApprovalsByUserID(user.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Message: "Failed to fetch approvals"})
+		return
+	}
+	c.JSON(http.StatusOK, approvals)
+}
+
+func GetPendingApprovals(c *gin.Context) {
+	requestingUser, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Message: "Failed to fetch user"})
+		return
+	}
+	user, ok := requestingUser.(*models.User)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Message: "Failed to fetch user"})
+		return
+	}
+	approvals, err := services.GetPendingApprovals(user.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, ErrorResponse{Message: "Failed to fetch approvals"})
+		return
+	}
+	c.JSON(http.StatusOK, approvals)
+}

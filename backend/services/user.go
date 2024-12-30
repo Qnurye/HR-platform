@@ -18,9 +18,17 @@ func GetUsers() ([]models.User, error) {
 	return users, nil
 }
 
+func GetUsersByDepartmentID(departmentID uint) ([]models.User, error) {
+	var users []models.User
+	if err := database.DB.Where("department_id = ?", departmentID).Preload("Supervisor").Preload("Department").Find(&users).Error; err != nil {
+		return nil, err
+	}
+	return users, nil
+}
+
 func GetUserByID(id uint) (*models.User, error) {
 	var user models.User
-	if err := database.DB.First(&user, id).Error; err != nil {
+	if err := database.DB.Preload("Supervisor").Preload("Department").First(&user, id).Error; err != nil {
 		return nil, errors.New("user not found")
 	}
 	return &user, nil
@@ -28,8 +36,17 @@ func GetUserByID(id uint) (*models.User, error) {
 
 func GetUserByUsername(username string) (*models.User, error) {
 	var user models.User
-	if err := database.DB.Where("username = ?", username).First(&user).Error; err != nil {
+	if err := database.DB.Where("username = ?", username).Preload("Supervisor").Preload("Department").First(&user).Error; err != nil {
 		return nil, errors.New("user not found")
+	}
+	return &user, nil
+}
+
+func GetUserByWorkIDNumber(workIDNumber string) (*models.User, error) {
+	var user models.User
+	result := database.DB.Where("work_id_number = ?", workIDNumber).Preload("Supervisor").Preload("Department").First(&user)
+	if result.Error != nil {
+		return nil, result.Error
 	}
 	return &user, nil
 }
@@ -93,6 +110,7 @@ func CreateSuperUser() {
 		Username:     username,
 		Password:     string(hashedPassword),
 		UserType:     models.Admin,
+		WorkIDNumber: "S0001",
 		Name:         "罗文杰",
 		DepartmentID: department.ID,
 	}

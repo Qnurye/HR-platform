@@ -34,6 +34,7 @@ func SetupRouter(r *gin.Engine, jwtSecret []byte) *gin.Engine {
 		users.POST("", handlers.CreateUser)
 		users.GET("", handlers.GetUsers)
 		users.GET("/:id", handlers.GetUser)
+		users.GET("/work-id/:workId", handlers.GetUserByWorkID)
 		users.PUT("/:id", handlers.UpdateUser)
 		users.DELETE("/:id", handlers.DeleteUser)
 	}
@@ -54,6 +55,8 @@ func SetupRouter(r *gin.Engine, jwtSecret []byte) *gin.Engine {
 		approvals.GET("/:id", handlers.GetApproval)
 		approvals.PUT("/:id", handlers.UpdateApproval)
 		approvals.DELETE("/:id", handlers.DeleteApproval)
+		approvals.GET("/my", handlers.GetMyApprovals)
+		approvals.GET("/pending", handlers.GetPendingApprovals)
 	}
 
 	return r

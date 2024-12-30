@@ -10,7 +10,7 @@ import (
 
 func GetApprovals() ([]models.Approval, error) {
 	var approvals []models.Approval
-	if err := database.DB.Find(&approvals).Error; err != nil {
+	if err := database.DB.Preload("Employee").Preload("Approver").Find(&approvals).Error; err != nil {
 		return nil, err
 	}
 	return approvals, nil
@@ -18,7 +18,7 @@ func GetApprovals() ([]models.Approval, error) {
 
 func GetApprovalByID(id uint) (*models.Approval, error) {
 	var approval models.Approval
-	if err := database.DB.First(&approval, id).Error; err != nil {
+	if err := database.DB.Preload("Employee").Preload("Approver").First(&approval, id).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, err
 		}
@@ -58,4 +58,22 @@ func DeleteApproval(id uint) error {
 		return err
 	}
 	return nil
+}
+
+func GetApprovalsByUserID(userID uint) ([]models.Approval, error) {
+	var approvals []models.Approval
+	if err := database.DB.Where("employee_id = ?", userID).Preload("Employee").Preload("Approver").Find(&approvals).Error; err != nil {
+		return nil, err
+	}
+	return approvals, nil
+}
+
+func GetPendingApprovals(userID uint) ([]models.Approval, error) {
+	var approvals []models.Approval
+	if err := database.DB.Where(
+		"status = ? and approver_id = ?",
+		models.Active, userID).Preload("Employee").Preload("Approver").Find(&approvals).Error; err != nil {
+		return nil, err
+	}
+	return approvals, nil
 }

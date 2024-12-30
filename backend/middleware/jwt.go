@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"employee-management-system/services"
 	"fmt"
 	"net/http"
 	"strings"
@@ -32,6 +33,22 @@ func JWTAuthMiddleware(jwtSecret []byte) gin.HandlerFunc {
 			return
 		}
 
+		claims, ok := token.Claims.(jwt.MapClaims)
+		if !ok || !token.Valid {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
+			c.Abort()
+			return
+		}
+
+		username := claims["username"].(string)
+		user, err := services.GetUserByUsername(username)
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
+			c.Abort()
+			return
+		}
+
+		c.Set("user", user)
 		c.Next()
 	}
 }

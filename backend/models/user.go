@@ -204,14 +204,15 @@ const (
 type Status int
 
 const (
-	Active Status = iota
+	Suspend        = -1
+	Active  Status = iota - 1
 	Inactive
 )
 
 type User struct {
 	ID                uint            `gorm:"primaryKey" json:"id"`                // 员工 ID
 	Username          string          `json:"username"`                            // 用户名
-	Password          string          `json:"password"`                            // 密码哈希值
+	Password          string          `json:"-"`                                   // 密码哈希值
 	UserType          UserType        `gorm:"default:2" json:"user_type"`          // 用户类型
 	Name              string          `json:"name"`                                // 姓名
 	Gender            Gender          `gorm:"default:0" json:"gender"`             // 性别
@@ -236,6 +237,6 @@ type User struct {
 	CreatedAt         time.Time       `json:"created_at"`                          // 创建时间
 	UpdatedAt         time.Time       `json:"updated_at"`                          // 更新时间
 	DeletedAt         gorm.DeletedAt  `gorm:"index" json:"-"`                      // 软删除时间
-	Supervisor        *User           `gorm:"foreignKey:SupervisorID"`
-	Department        Department      `gorm:"foreignKey:DepartmentID"`
+	Supervisor        *User           `gorm:"foreignKey:SupervisorID" json:"supervisor,omitempty"`
+	Department        Department      `gorm:"foreignKey:DepartmentID" json:"department"`
 }

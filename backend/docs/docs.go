@@ -95,6 +95,34 @@ const docTemplate = `{
                 }
             }
         },
+        "/approvals/my": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Get approvals assigned to the current user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "approvals"
+                ],
+                "summary": "Get approvals assigned to the current user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Approval"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/approvals/{id}": {
             "get": {
                 "security": [
@@ -539,6 +567,14 @@ const docTemplate = `{
                     "users"
                 ],
                 "summary": "Get all users",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Department ID",
+                        "name": "department_id",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -588,6 +624,46 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/work-id/{workId}": {
+            "get": {
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "description": "Get a user by their work ID number",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get user by work ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Work ID Number",
+                        "name": "workId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/handlers.ErrorResponse"
                         }
@@ -841,7 +917,7 @@ const docTemplate = `{
                     "description": "部门名称",
                     "type": "string"
                 },
-                "parentDepartment": {
+                "parent_department": {
                     "$ref": "#/definitions/models.Department"
                 },
                 "parent_department_id": {
@@ -1215,10 +1291,6 @@ const docTemplate = `{
                 },
                 "name": {
                     "description": "姓名",
-                    "type": "string"
-                },
-                "password": {
-                    "description": "密码哈希值",
                     "type": "string"
                 },
                 "phone_number": {

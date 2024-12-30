@@ -77,11 +77,11 @@ definitions:
       name:
         description: 部门名称
         type: string
+      parent_department:
+        $ref: '#/definitions/models.Department'
       parent_department_id:
         description: 上级部门ID
         type: integer
-      parentDepartment:
-        $ref: '#/definitions/models.Department'
       updated_at:
         description: 更新时间
         type: string
@@ -405,9 +405,6 @@ definitions:
       name:
         description: 姓名
         type: string
-      password:
-        description: 密码哈希值
-        type: string
       phone_number:
         description: 电话号码
         type: string
@@ -606,6 +603,23 @@ paths:
       summary: Update an approval by ID
       tags:
       - approvals
+  /approvals/my:
+    get:
+      description: Get approvals assigned to the current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Approval'
+            type: array
+      security:
+      - Bearer: []
+      summary: Get approvals assigned to the current user
+      tags:
+      - approvals
   /auth/login:
     post:
       consumes:
@@ -796,6 +810,11 @@ paths:
   /users:
     get:
       description: Get all users
+      parameters:
+      - description: Department ID
+        in: query
+        name: department_id
+        type: integer
       produces:
       - application/json
       responses:
@@ -918,6 +937,31 @@ paths:
       security:
       - Bearer: []
       summary: Update a user by ID
+      tags:
+      - users
+  /users/work-id/{workId}:
+    get:
+      description: Get a user by their work ID number
+      parameters:
+      - description: Work ID Number
+        in: path
+        name: workId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.ErrorResponse'
+      security:
+      - Bearer: []
+      summary: Get user by work ID
       tags:
       - users
 securityDefinitions:
