@@ -46,5 +46,21 @@ export const get = async <T>(url: string, data: never): Promise<T> => {
     return Promise.reject(error);
   }
 }
+export const put = async <T>(url: string, data: never): Promise<T> => {
+  try {
+    const response = await axiosInstance.put(url, data);
+    return response.data as T;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
+export const del = async <T>(url: string, data: never): Promise<T> => {
+  try {
+    const response = await axiosInstance.delete(url, data);
+    return response.data as T;
+  } catch (error) {
+    return Promise.reject(error);
+  }
+}
 
 export default axiosInstance;

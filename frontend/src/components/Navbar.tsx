@@ -10,7 +10,7 @@ import {
 import React from "react";
 import Link from "next/link";
 import {APP_NAME} from "@/lib/AppConfig";
-import {BicepsFlexedIcon, Building2Icon, SignatureIcon, UsersRoundIcon} from "lucide-react";
+import {BicepsFlexedIcon} from "lucide-react";
 import {AvatarUriFromName, cn, isTokenValid, loadToken} from "@/lib/utils";
 import {User} from "@/service/schema/user";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
@@ -41,35 +41,11 @@ export function Navbar() {
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/approvals" legacyBehavior passHref>
-              <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "space-x-2")}>
-                <SignatureIcon className="w-4 h-4"/>
-                <span> 审批 </span>
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/employee" legacyBehavior passHref>
-              <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "space-x-2")}>
-                <UsersRoundIcon className="w-4 h-4"/>
-                <span> 同事 </span>
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <Link href="/employee" legacyBehavior passHref>
-              <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "space-x-2")}>
-                <Building2Icon className="w-4 h-4"/>
-                <span> 部门 </span>
-              </NavigationMenuLink>
-            </Link>
-          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
       <div>
         {user ? (
-          <Link href={`/employee/${user.id}`} passHref>
+          <Link href={`/employees/${user.id}`} passHref>
             <Button variant="ghost" className="flex items-center space-x-2">
               <Avatar className="w-8 h-8">
                 <AvatarImage src={AvatarUriFromName(user.name)} alt={user.name}/>

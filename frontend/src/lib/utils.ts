@@ -4,6 +4,7 @@ import {lorelei} from "@dicebear/collection";
 import {createAvatar} from "@dicebear/core";
 import {getCurrentUser} from "@/service/auth";
 import {UserType} from "@/service/schema/user";
+import {Department} from "@/service/schema/department";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -29,6 +30,10 @@ export function isTokenValid(token: string | null): boolean {
   }
 }
 
+export function removeToken(): void {
+  localStorage.removeItem('token');
+}
+
 export function AvatarUriFromName(name: string): string {
   const avatar = createAvatar(lorelei, {
     seed: name,
@@ -39,5 +44,39 @@ export function AvatarUriFromName(name: string): string {
 export async function isAdmin(): Promise<boolean> {
   if (!isTokenValid(loadToken())) return false;
   const user = await getCurrentUser();
-  return user.userType === UserType.Admin;
+  return user.user_type === UserType.Admin;
+}
+
+export const formatDate = (date: Date) => {
+  return new Date(date).toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+
+export function buildDepartmentTree(departments: Department[]): Department[] {
+  const departmentMap = new Map<number, Department>();
+  const roots: Department[] = [];
+
+  // First pass: create a map of all departments
+  departments.forEach(dept => {
+    departmentMap.set(dept.id, {...dept, children: []});
+  });
+
+  // Second pass: build the tree structure
+  departments.forEach(dept => {
+    const department = departmentMap.get(dept.id)!;
+    if (dept.parent_department_id) {
+      const parent = departmentMap.get(dept.parent_department_id);
+      if (parent) {
+        if (!parent.children) parent.children = [];
+        parent.children.push(department);
+      }
+    } else {
+      roots.push(department);
+    }
+  });
+
+  return roots;
 }

@@ -36,7 +36,7 @@ export default function SignInPage() {
       setToken(result.token)
       router.push('/')
     } catch (e) {
-        setError('用户名或密码错误')
+      setError('用户名或密码错误')
     } finally {
       setLoading(false)
     }
@@ -86,7 +86,7 @@ export default function SignInPage() {
               </div>
             )}
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? <Loader className="animate-spin" /> : '进入系统'}
+              {loading ? <Loader className="animate-spin"/> : '进入系统'}
             </Button>
           </form>
         </CardContent>
